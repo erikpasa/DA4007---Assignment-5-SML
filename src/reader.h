@@ -14,6 +14,7 @@ public:
     
 private:
     //variables
+    std::string text;
     std::size_t ksize; //size of kgrams
     std::map<std::string,int> kgramcount; //kgrams in the file, and the count of them
     std::map<std::string,std::map<char,int>> charactertransition; //characters that are after the associated kgram, and the count for the letters
