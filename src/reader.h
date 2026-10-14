@@ -16,11 +16,12 @@ private:
     //variables
     std::string text;
     std::size_t ksize; //size of kgrams
+    std::string filename;
     std::map<std::string,int> kgramcount; //kgrams in the file, and the count of them
     std::map<std::string,std::map<char,int>> charactertransition; //characters that are after the associated kgram, and the count for the letters
     std::set<char> alphabet; //alphabet for the textfile
 
     //functions
-    std::string readfile(const std::string& filename); //reads file and returns a text
-    void counter(const std::string& text);  //finds kgrams counts them and counts the neighbouring letter for them, and also creates the alphabet
+    std::string readfile(); //reads file and returns a text
+    void counter();  //finds kgrams counts them and counts the neighbouring letter for them
 };
