@@ -12,6 +12,7 @@ reader::reader(const std::string& Filename,const std::size_t kgramsize) {
     filename = Filename;
     alphabet.clear();
     text = readfile();
+    counter();
 }
 
 //Reading file sequence
@@ -43,4 +44,18 @@ void reader::counter() {
         charactertransition[currentkgram][current_neighborletter]++;
     }
 }
+
+const std::set<char>&  reader::get_alphabet() const {
+    return alphabet;
+}
+
+const std::map<std::string,int>& reader::get_kgramcount() const {
+    return kgramcount;
+}
+
+
+const std::map<std::string,std::map<char,int>>& reader::get_charactertransition() const {
+    return charactertransition;
+}
+
 
