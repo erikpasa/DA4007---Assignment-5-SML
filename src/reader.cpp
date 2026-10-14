@@ -9,13 +9,13 @@ using namespace std;
 
 //Constructor
 reader::reader(const std::string& Filename,const std::size_t kgramsize) {
+    filename = Filename;
     alphabet.clear();
-    text = readfile(Filename);
-
+    text = readfile();
 }
 
 //Reading file sequence
-std::string reader::readfile(const std::string& filename) {
+std::string reader::readfile() {
     //opening file 
     fstream file;
     file.open(filename);
@@ -33,3 +33,14 @@ std::string reader::readfile(const std::string& filename) {
     alphabet.insert(text.begin(), text.end());
     return text;
 }
+
+void reader::counter() {
+    for (size_t i = 0; i + 3 < text.size(); i++) {
+        std::string currentkgram = text.substr(i, 3);
+        char current_neighborletter = text.at(i + 3);
+
+        kgramcount[currentkgram]++;
+        charactertransition[currentkgram][current_neighborletter]++;
+    }
+}
+
