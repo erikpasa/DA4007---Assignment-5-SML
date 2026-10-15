@@ -32,7 +32,20 @@ void writer::createweights(const std::string& kgram) {
 }
 
 std::string writer::writeoutput() {
-    
+    string output;
+    //initial weights
+    {
+    vector<string> kgrams;
+    vector<double> startweights;
+    const std::map<std::string,int>& kgramscount= r.get_kgramcount();
+    for(const auto& i : kgramscount) {
+        kgrams.push_back(i.first);
+        startweights.push_back(i.second);
+    }
+    //initial distribution
+    discrete_distribution<int> dist(startweights.begin(),startweights.end());
+    output+=kgrams.at(dist(engine));
+    }
     for(int i = 0; i<length;++i) {
 
     }
