@@ -1,61 +1,63 @@
-#include "reader.h";
-#include <iostream>
+#include "reader.h"
 #include <stdexcept>
-#include <fstream>;
+#include <fstream>
+#include <cstddef>
 #include <sstream>
 
 
 using namespace std;
 
 //Constructor
-reader::reader(const std::string& Filename,const std::size_t kgramsize) {
+reader::reader(const string& Filename,const size_t kgramsize) {
     filename = Filename;
-    alphabet.clear();
-    text = readfile();
-    counter();
+    if(kgramsize == 0) {
+        throw invalid_argument("The kgram cannot have zero length");
+    }
+    string text = readfile(Filename,kgramsize);
+    alphabet.insert(text.begin(), text.end());
+    counter(text,kgramsize);
 }
 
 //Reading file sequence
-std::string reader::readfile() {
+string reader::readfile(const string& Filename, const size_t kgramsize) {
     //opening file 
-    fstream file;
-    file.open(filename);
+    ifstream file;
+    file.open(Filename);
     if(!file.is_open()){
-        throw("Could not open text file");
+        throw runtime_error("cannot open file '" + Filename + "'");
     }
 
-    //reading file and creating alphabet
     // Faster than reading char by char with get(): the file is transferred in 
     //bulk via its stream buffer, avoiding per-character stream call overhead.
     ostringstream ss; 
     ss << file.rdbuf();
-    text = ss.str();
-    //set automatically removes duplicate chars
-    alphabet.insert(text.begin(), text.end());
+    string text = ss.str();
+    if(text.size()<=kgramsize){
+        throw runtime_error("text file is too short compared to chosen kgrams");
+    }
     return text;
 }
 
-void reader::counter() {
-    for (size_t i = 0; i + 3 < text.size(); i++) {
-        std::string currentkgram = text.substr(i, 3);
-        char current_neighborletter = text.at(i + 3);
+void reader::counter(const string& text, size_t ksize) {
+    for (size_t i = 0; i + ksize <= text.size(); i++) {
+        kgramcount[text.substr(i, ksize)]++;
+    }
 
-        kgramcount[currentkgram]++;
-        charactertransition[currentkgram][current_neighborletter]++;
+ 
+    for (size_t i = 0; i + ksize < text.size(); i++) {
+        charactertransition[text.substr(i, ksize)][text[i + ksize]]++;
     }
 }
 
-const std::set<char>&  reader::get_alphabet() const {
+const set<char>&  reader::get_alphabet() const {
     return alphabet;
 }
 
-const std::map<std::string,int>& reader::get_kgramcount() const {
+const map<string,int>& reader::get_kgramcount() const {
     return kgramcount;
 }
 
 
-const std::map<std::string,std::map<char,int>>& reader::get_charactertransition() const {
+const map<string,map<char,int>>& reader::get_charactertransition() const {
     return charactertransition;
 }
-
-
