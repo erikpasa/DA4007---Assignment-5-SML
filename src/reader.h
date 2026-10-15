@@ -20,6 +20,6 @@ private:
     std::set<char> alphabet; //alphabet for the textfile
 
     //functions
-    std::string readfile(const string& Filename, const std::size_t kgramsize); //reads file and returns a text
+    std::string readfile(const std::string& Filename, const std::size_t kgramsize); //reads file and returns a text
     void counter(const std::string& text,std::size_t kgramsize);  //finds kgrams counts them and counts the neighbouring letter for them
 };
