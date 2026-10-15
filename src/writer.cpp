@@ -28,7 +28,19 @@ writer::writer(const reader& reader_ref, double pseudocount,
 };
 
 void writer::createweights(const std::string& kgram) {
-
+    weights.clear();
+    const map<string,map<char,int>>& transitions = r.get_charactertransition();
+    
+    const map<char,int>& lettercount = transitions.at(kgram);
+    for(const auto& i : alphabetvector){
+        auto it = lettercount.find(i);
+        if(it != lettercount.end()) {
+            weights.push_back(it->second+alpha);
+        }
+        else{
+            weights.push_back(0.0+alpha);
+        }
+    }
 }
 
 std::string writer::writeoutput() {
@@ -37,7 +49,7 @@ std::string writer::writeoutput() {
     {
     vector<string> kgrams;
     vector<double> startweights;
-    const std::map<std::string,int>& kgramscount= r.get_kgramcount();
+    const std::map<std::string,int>& kgramscount = r.get_kgramcount();
     for(const auto& i : kgramscount) {
         kgrams.push_back(i.first);
         startweights.push_back(i.second);
@@ -46,8 +58,15 @@ std::string writer::writeoutput() {
     discrete_distribution<int> dist(startweights.begin(),startweights.end());
     output+=kgrams.at(dist(engine));
     }
+    discrete_distribution<int> dist;
+    std::map<std::string,std::map<char,int>> charactertransition;
+    const map<string,map<char,int>>& transitions = r.get_charactertransition();
     for(int i = 0; i<length;++i) {
-
+        string currentkgram = output.substr(output.size() - sizekgram);
+        createweights(currentkgram);
+        for(const auto& i : transitions.at()) {
+        output+=alphabetvector.at(dist(engine));
     }
+}
 }
 
