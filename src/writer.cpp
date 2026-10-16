@@ -71,15 +71,14 @@ std::string writer::writeoutput() {
     discrete_distribution<int> dist(startweights.begin(),startweights.end());
     output+=kgrams.at(dist(engine));
     }
-    discrete_distribution<int> dist;
-    std::map<std::string,std::map<char,int>> charactertransition;
-    const map<string,map<char,int>>& transitions = r.get_charactertransition();
-    for(int i = 0; i<length;++i) {
+    
+    while(output.size()<length) {
         string currentkgram = output.substr(output.size() - sizekgram);
-        createweights(currentkgram);
-        for(const auto& i : transitions.at()) {
+        if(createweights(currentkgram)){
+        discrete_distribution<int> dist(weights.begin(),weights.end());
         output+=alphabetvector.at(dist(engine));
     }
+    else{break;}
 }
 return output;
 }
