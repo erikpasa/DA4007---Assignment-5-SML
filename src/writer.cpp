@@ -30,23 +30,25 @@ writer::writer(const reader& reader_ref, double pseudocount,
 bool writer::createweights(const std::string& kgram) {
     weights.clear();
 
+    //check if current kgram exists
     const map<string, map<char, int>>& transitions = r.get_charactertransition();
     auto kit = transitions.find(kgram);
     bool found = (kit != transitions.end());
 
+
     for (char c : alphabetvector) {
         double count = 0;
-
+        //if kgram exists, add to count
         if (found) {
             auto it = kit->second.find(c);
             if (it != kit->second.end()) {
                 count = it->second;
             }
         }
-
+        //add alpha as well as count
         weights.push_back(count + alpha);   
     }
-
+    //check if to continue to write text. If no weights because of alpha==0, give false and writeoutput stops
     for (double w : weights) {
         if (w > 0) {
             return true;
@@ -71,7 +73,7 @@ std::string writer::writeoutput() {
     discrete_distribution<int> dist(startweights.begin(),startweights.end());
     output+=kgrams.at(dist(engine));
     }
-    
+    //create next output
     while(output.size()<length) {
         string currentkgram = output.substr(output.size() - sizekgram);
         if(createweights(currentkgram)){
