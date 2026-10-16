@@ -27,21 +27,34 @@ writer::writer(const reader& reader_ref, double pseudocount,
 
 };
 
-void writer::createweights(const std::string& kgram) {
+bool writer::createweights(const std::string& kgram) {
     weights.clear();
-    const map<string,map<char,int>>& transitions = r.get_charactertransition();
-    
-    const map<char,int>& lettercount = transitions.at(kgram);
-    for(const auto& i : alphabetvector){
-        auto it = lettercount.find(i);
-        if(it != lettercount.end()) {
-            weights.push_back(it->second+alpha);
+
+    const map<string, map<char, int>>& transitions = r.get_charactertransition();
+    auto kit = transitions.find(kgram);
+    bool found = (kit != transitions.end());
+
+    for (char c : alphabetvector) {
+        double count = 0;
+
+        if (found) {
+            auto it = kit->second.find(c);
+            if (it != kit->second.end()) {
+                count = it->second;
+            }
         }
-        else{
-            weights.push_back(0.0+alpha);
+
+        weights.push_back(count + alpha);   
+    }
+
+    for (double w : weights) {
+        if (w > 0) {
+            return true;
         }
     }
+    return false;
 }
+
 
 std::string writer::writeoutput() {
     string output;
@@ -68,5 +81,6 @@ std::string writer::writeoutput() {
         output+=alphabetvector.at(dist(engine));
     }
 }
+return output;
 }
 
