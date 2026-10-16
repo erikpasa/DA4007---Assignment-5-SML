@@ -58,7 +58,9 @@ if(argv[3][0]=='-' || pos != string(argv[3]).size()) {
 throw invalid_argument("output length must be a positive integer");
         }
     }
-    
+    reader  input_reader(Filename,kgramsize);
+    writer output_writer(input_reader,alpha,lengthoutput,kgramsize);
+    cout << output_writer.writeoutput() << '\n';
     }
 catch(const exception& e) {
 cerr << "slm: " << e.what() << '\n';
