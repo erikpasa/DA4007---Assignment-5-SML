@@ -19,7 +19,7 @@ private:
     std::size_t sizekgram;
     std::vector<char> alphabetvector; //lets us look up a number directly, which is not possible with set
 
-    void createweights(const std::string& kgram); //creates weight distribution for each next letter
+    bool createweights(const std::string& kgram); //creates weight distribution for each next letter
 
 
  };
