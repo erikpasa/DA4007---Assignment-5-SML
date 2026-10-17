@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++23 -Wall -Wextra -MMD -MP
+CXXFLAGS = -std=c++17 -Wall -Wextra -MMD -MP
 
 TARGET = slm
 SOURCES = src/main.cpp src/reader.cpp src/writer.cpp
