@@ -67,3 +67,8 @@ Testing/
 .cache/
 .DS_Store
 slm
+slm
+reader_unittest
+moby_dick.txt
+.vscode/
+a_modest_proposal.txt
