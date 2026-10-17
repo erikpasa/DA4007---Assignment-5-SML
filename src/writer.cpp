@@ -25,7 +25,7 @@ writer::writer(const reader& reader_ref, double pseudocount,
         alphabetvector.push_back(c);
     }
 
-};
+}
 
 bool writer::createweights(const std::string& kgram) {
     weights.clear();
